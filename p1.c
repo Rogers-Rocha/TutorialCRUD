@@ -4,14 +4,14 @@
 #define max 20
 
 typedef struct Data tipoData;
-typedef struct Disciplina tipoDisc;
+typedef struct Disc tipoDisc;
 struct Data{
     int dia;
     int mes;
     int ano;
 };
 
-struct Disciplina{
+struct Disc{
     char discplina[50];
     char professor[50];
     float notas[3];
@@ -21,8 +21,9 @@ struct Disciplina{
 struct Aluno{
     char aluno[50];
     char endereco[70];
+    int matricula;
     tipoData Data;
-    tipoDisc Disciplina;
+    tipoDisc Disc;
 }Cadastro[max];
 
 int menu(void), verificaLista(void);
@@ -69,7 +70,7 @@ void inicia(void){
 
 void Cadastrar(void){
 
-};
+}
 
 int verificaLista(void){
     register int t;
