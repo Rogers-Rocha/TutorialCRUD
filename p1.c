@@ -69,8 +69,40 @@ void inicia(void){
 };
 
 void Cadastrar(void){
+    
+    int Cad;
+    
+    Cad = verificaLista();
 
-}
+    printf("\nDigite a matricula do aluno: ");
+    fflush(stdout);
+    scanf("%d", &Cadastro[Cad].matricula);
+
+    printf("\nDigite o nome do aluno: ");
+    fflush(stdout);
+    gets(Cadastro[Cad].aluno);
+
+    printf("\nDigite o endereço do aluno: ");
+    fflush(stdout);
+    gets(Cadastro[Cad].endereco);
+
+    printf("\nDigite a data de nascimento: (dd mm aaaa) ");
+    fflush(stdout);
+    scanf("%d %d %d", &Cadastro[Cad].Data.dia, &Cadastro[Cad].Data.mes, &Cadastro[Cad].Data.ano);
+
+    printf("\nDiciplina: ");
+    fflush(stdout);
+    scanf("%d", &Cadastro[Cad].Disc.discplina);
+
+    printf("\nProfessor: ");
+    fflush(stdout);
+    gets(Cadastro[Cad].Disc.professor);
+
+    printf("\nDigite as 3 notas do aluno: ");
+    fflush(stdout);
+    scanf("%f %f %f", &Cadastro[Cad].Disc.notas[0], &Cadastro[Cad].Disc.notas[1], &Cadastro[Cad].Disc.notas[2]);
+
+};
 
 int verificaLista(void){
     register int t;
