@@ -20,7 +20,6 @@ struct Disc{
 
 struct Aluno{
     char aluno[50];
-    char endereco[70];
     int matricula;
     tipoData Data;
     tipoDisc Disc;
@@ -100,7 +99,7 @@ void Cadastrar(void){
         return;
     }
 
-    printf("\nO numero de alunos cadastrados: %d/%d", Cad, max);
+    printf("\nNumero de alunos cadastrados: %d/%d\n", Cad, max);
 
     printf("\nDigite a matricula do aluno: ");
     fflush(stdout);
@@ -111,11 +110,6 @@ void Cadastrar(void){
     fflush(stdout);
     fgets(Cadastro[Cad].aluno, 50, stdin);
     Cadastro[Cad].aluno[strcspn(Cadastro[Cad].aluno, "\n")] = '\0';
-
-    printf("\nDigite o endereco do aluno: ");
-    fflush(stdout);
-    fgets(Cadastro[Cad].endereco, 70, stdin);
-    Cadastro[Cad].endereco[strcspn(Cadastro[Cad].endereco, "\n")] = '\0';
 
     printf("\nDigite a data de nascimento: (dd mm aaaa) ");
     fflush(stdout);
@@ -135,6 +129,12 @@ void Cadastrar(void){
     printf("\nDigite as 3 notas do aluno: ");
     fflush(stdout);
     scanf("%f %f %f", &Cadastro[Cad].Disc.notas[0], &Cadastro[Cad].Disc.notas[1], &Cadastro[Cad].Disc.notas[2]);
+    float media = (Cadastro[Cad].Disc.notas[0] + Cadastro[Cad].Disc.notas[1] + Cadastro[Cad].Disc.notas[2])/3;
+
+    system("cls");
+    printf("-------------------------------------------------------");
+    printf("\nExibicao dos dados armazenados apenas nesse cadastro");
+    printf("\nId: %d\nAluno: %s\nNascimento: %d/%d/%d\nNotas: %3.2f| %3.2f| %3.2f|\nMedia: %.2f", Cad + 1, Cadastro[Cad].aluno, Cadastro[Cad].Data.dia, Cadastro[Cad].Data.mes, Cadastro[Cad].Data.ano, Cadastro[Cad].Disc.notas[0], Cadastro[Cad].Disc.notas[1], Cadastro[Cad].Disc.notas[2], media);
     printf("\n");
 
 };
@@ -148,3 +148,7 @@ int verificaLista(void){
     }
     return max;
 };
+
+// gcc -o a p1.c
+// .\a
+// 
