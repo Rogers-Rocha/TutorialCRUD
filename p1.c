@@ -3,6 +3,8 @@
 #include <string.h>
 #define max 20
 
+int ind = 0;
+char alunos_cadastrados[max][40];
 typedef struct Data tipoData;
 typedef struct Disc tipoDisc;
 struct Data{
@@ -25,19 +27,26 @@ struct Aluno{
     tipoDisc Disc;
 }Cadastro[max];
 
-int menu(void), verificaLista(void);
-void inicia(void), Cadastrar(void);
+int menu(void), verificaLista(void), volt(), Cadastrar(int fim, int Cad);
+void inicia(void);
+void listar(void), exibirAprovados(void);
 
 int main(void){
     
-    int opcao;
+    int opcao, Cad = 0;
     inicia();
 
     do{
         opcao = menu();
         switch(opcao){
             case 1:
-                Cadastrar();
+                ind = Cadastrar(ind, Cad);
+                break;
+            case 2:
+                listar();
+                break;
+            case 3:
+                exibirAprovados();
                 break;
             case 8:
                 printf("\nSaindo do programa...\n");
@@ -87,67 +96,117 @@ void inicia(void){
     }
 };
 
-void Cadastrar(void){
+int Cadastrar(int ind, int Cad){
     
     system("cls");
-    int Cad;
-    
-    Cad = verificaLista();
+    int exit = 2;
+    while(exit == 2){
+        if(ind < max){
+            printf("\nNumero de alunos cadastrados: %d/%d\n", ind, max);
 
-    if(Cad >= max){
-        printf("\nNao ha espaco para mais cadastros.\n");
-        return;
+            // printf("\nDigite a matricula do aluno: ");
+            // fflush(stdout);
+            // scanf("%d", &Cadastro[Cad].matricula);
+            // getchar();
+
+            printf("\nDigite o nome do aluno: ");
+            fflush(stdout);
+            fgets(Cadastro[ind].aluno, 50, stdin);
+            Cadastro[ind].aluno[strcspn(Cadastro[ind].aluno, "\n")] = '\0';
+
+            strcpy(alunos_cadastrados[Cad], Cadastro[ind].aluno);
+            Cad++;
+
+            printf("\nDigite a data de nascimento (dd mm aaaa): ");
+            fflush(stdout);
+            scanf("%d %d %d", &Cadastro[ind].Data.dia, &Cadastro[ind].Data.mes, &Cadastro[ind].Data.ano);
+            getchar();
+
+            // printf("\nDiciplina: ");
+            // fflush(stdout);
+            // fgets(Cadastro[Cad].Disc.discplina, 50, stdin);
+            // Cadastro[Cad].Disc.discplina[strcspn(Cadastro[Cad].Disc.discplina, "\n")] = '\0';
+
+            // printf("\nProfessor: ");
+            // fflush(stdout);
+            // fgets(Cadastro[Cad].Disc.professor, 50, stdin);
+            // Cadastro[Cad].Disc.professor[strcspn(Cadastro[Cad].Disc.discplina, "\n")] = '\0';
+
+            printf("\nDigite as 3 notas do aluno: ");
+            fflush(stdout);
+            scanf("%f %f %f", &Cadastro[ind].Disc.notas[0], &Cadastro[ind].Disc.notas[1], &Cadastro[ind].Disc.notas[2]);
+            Cadastro[ind].Disc.media = (Cadastro[ind].Disc.notas[0] + Cadastro[ind].Disc.notas[1] + Cadastro[ind].Disc.notas[2])/3;
+            ind++;
+        }else{
+            printf("\nNao ha espaco para mais cadastros.\n");
+        }
+        system("cls");
+        printf("-------------------------------------------------------");
+        printf("\nExibicao dos dados armazenados apenas nesse cadastro");
+        for(int i = 0; i < Cad; i++){
+
+            printf("\nId: %d\nAluno: %s\nNascimento: %d/%d/%d\nNotas: %3.2f| %3.2f| %3.2f|\nMedia: %.2f", i + 1, Cadastro[i].aluno, Cadastro[i].Data.dia, Cadastro[i].Data.mes, Cadastro[i].Data.ano, Cadastro[i].Disc.notas[0], Cadastro[i].Disc.notas[1], Cadastro[i].Disc.notas[2], Cadastro[i].Disc.media);
+            printf("\n");
+        }
+        printf("\n");
+        exit = volt();
     }
-
-    printf("\nNumero de alunos cadastrados: %d/%d\n", Cad, max);
-
-    printf("\nDigite a matricula do aluno: ");
-    fflush(stdout);
-    scanf("%d", &Cadastro[Cad].matricula);
-    getchar();
-
-    printf("\nDigite o nome do aluno: ");
-    fflush(stdout);
-    fgets(Cadastro[Cad].aluno, 50, stdin);
-    Cadastro[Cad].aluno[strcspn(Cadastro[Cad].aluno, "\n")] = '\0';
-
-    printf("\nDigite a data de nascimento: (dd mm aaaa) ");
-    fflush(stdout);
-    scanf("%d %d %d", &Cadastro[Cad].Data.dia, &Cadastro[Cad].Data.mes, &Cadastro[Cad].Data.ano);
-    getchar();
-
-    printf("\nDiciplina: ");
-    fflush(stdout);
-    fgets(Cadastro[Cad].Disc.discplina, 50, stdin);
-    Cadastro[Cad].Disc.discplina[strcspn(Cadastro[Cad].Disc.discplina, "\n")] = '\0';
-
-    printf("\nProfessor: ");
-    fflush(stdout);
-    fgets(Cadastro[Cad].Disc.professor, 50, stdin);
-    Cadastro[Cad].Disc.professor[strcspn(Cadastro[Cad].Disc.discplina, "\n")] = '\0';
-
-    printf("\nDigite as 3 notas do aluno: ");
-    fflush(stdout);
-    scanf("%f %f %f", &Cadastro[Cad].Disc.notas[0], &Cadastro[Cad].Disc.notas[1], &Cadastro[Cad].Disc.notas[2]);
-    float media = (Cadastro[Cad].Disc.notas[0] + Cadastro[Cad].Disc.notas[1] + Cadastro[Cad].Disc.notas[2])/3;
-
-    system("cls");
-    printf("-------------------------------------------------------");
-    printf("\nExibicao dos dados armazenados apenas nesse cadastro");
-    printf("\nId: %d\nAluno: %s\nNascimento: %d/%d/%d\nNotas: %3.2f| %3.2f| %3.2f|\nMedia: %.2f", Cad + 1, Cadastro[Cad].aluno, Cadastro[Cad].Data.dia, Cadastro[Cad].Data.mes, Cadastro[Cad].Data.ano, Cadastro[Cad].Disc.notas[0], Cadastro[Cad].Disc.notas[1], Cadastro[Cad].Disc.notas[2], media);
-    printf("\n");
-
+    return ind;
 };
 
-int verificaLista(void){
-    register int t;
-    for(t = 0; t < max; t++){
-        if(Cadastro[t].aluno[0] == '\0'){
-            return t;
+void listar(void){
+    system("cls");
+    int i, exit = 2;
+    while (exit == 2)
+    {
+        if(ind == 0){
+            printf("\nNao existe aluno cadastrado");
+            return;
+        }else{
+            printf("-------------------------------------------------------");
+            printf("\nExibicao de todos os dados armazenados");
+            for(i = 0; i < ind; i++){
+                printf("\nId: %d\nAluno: %s\nNascimento: %d/%d/%d\nNotas: %3.2f| %3.2f| %3.2f|\nMedia: %.2f\n", i + 1, Cadastro[i].aluno, Cadastro[i].Data.dia, Cadastro[i].Data.mes, Cadastro[i].Data.ano, Cadastro[i].Disc.notas[0], Cadastro[i].Disc.notas[1], Cadastro[i].Disc.notas[2], Cadastro[i].Disc.media);
+            }
+            printf("\nTotal de alunos cadastrados: %d\n", ind);
+        }
+        exit = volt();
+    }
+}
+
+void exibirAprovados(void){
+    int cont = 0;
+    float aprov; 
+    printf("-------------------------------------------------------");
+    printf("\nExibicao dos alunos aprovados:\n");
+    for(int i = 0; i < ind; i ++){
+        if(Cadastro[i].Disc.media > 7){
+            cont++;
+            printf("\nCont: %d", cont);
+            printf("\nAluno %d: %s aprovado com media %.2f", i + 1, Cadastro[i].aluno, Cadastro[i].Disc.media);
         }
     }
-    return max;
-};
+    aprov = (cont/ind)*100;
+    printf("\n\n%.2f por cento da sala foi aprovada.\n", aprov);
+}
+
+int volt()
+{
+    int volt;
+    printf("\nDeseja voltar ao menu? 1(sim), 2(nao): ");
+    scanf("%d", &volt);
+    getchar();
+
+    switch (volt)
+    {
+    case 1:
+        printf("\n");
+    case 2:
+        break;
+    }
+
+    return volt;
+}
 
 // gcc -o a p1.c
 // .\a
