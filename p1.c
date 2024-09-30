@@ -33,7 +33,7 @@ int menu(void), verificaLista(void), volt(), Cadastrar(int ind, int cad);
 void disciplinas(void);
 void inicia(void);
 void listar(void), exibirAprovados(void);
-void buscarAluno(void);
+void buscarAluno(void), pordisciplina(void);
 
 int main(void)
 {
@@ -58,6 +58,9 @@ int main(void)
             break;
         case 4:
             buscarAluno();
+            break;
+        case 5:
+            pordisciplina();
             break;
         case 8:
             printf("\nSaindo do programa...\n");
@@ -111,6 +114,8 @@ void inicia(void)
     }
 };
 
+
+
 int Cadastrar(int ind, int cad)
 {
 
@@ -151,6 +156,7 @@ int Cadastrar(int ind, int cad)
             printf("\nDigite as 3 notas do aluno: ");
             fflush(stdout);
             scanf("%f %f %f", &Cadastro[ind].Disc.notas[0], &Cadastro[ind].Disc.notas[1], &Cadastro[ind].Disc.notas[2]);
+            getchar();
             Cadastro[ind].Disc.media = (Cadastro[ind].Disc.notas[0] + Cadastro[ind].Disc.notas[1] + Cadastro[ind].Disc.notas[2])/3;
             cad++;
             ind++;
@@ -201,7 +207,7 @@ void listar(void)
             printf("\nExibicao de todos os dados armazenados");
             for (i = 0; i < ind; i++)
             {
-                printf("\nId: %d\nAluno: %s\nNascimento: %d/%d/%d\nNotas: %3.2f| %3.2f| %3.2f|\nMedia: %.2f\n", i + 1, Cadastro[i].aluno, Cadastro[i].Data.dia, Cadastro[i].Data.mes, Cadastro[i].Data.ano, Cadastro[i].Disc.notas[0], Cadastro[i].Disc.notas[1], Cadastro[i].Disc.notas[2], Cadastro[i].Disc.media);
+                printf("\nIndice: %d\nAluno: %s\nNascimento: %d/%d/%d\nDisciplina: %s\nNotas: %3.2f| %3.2f| %3.2f|\nMedia: %.2f", i + 1, Cadastro[i].aluno, Cadastro[i].Data.dia, Cadastro[i].Data.mes, Cadastro[i].Data.ano, Cadastro[i].Disc.disciplina, Cadastro[i].Disc.notas[0], Cadastro[i].Disc.notas[1], Cadastro[i].Disc.notas[2], Cadastro[i].Disc.media);
             }
             printf("\nTotal de alunos cadastrados: %d\n", ind);
         }
@@ -232,6 +238,7 @@ void exibirAprovados(void)
     {
         printf("\n\nNao ha alunos cadastrados para calcular a porcentagem.\n");
     }
+    
 }
 
 void buscarAluno(void)
@@ -271,6 +278,44 @@ void buscarAluno(void)
     }
 }
 
+void pordisciplina(void)
+{
+    system("cls");
+    int i, exit = 2;
+    char discip[40];
+
+    while (exit == 2)
+    {
+        if (ind == 0)
+        {
+            printf("\nNenhuma disciplina cadastrada.\n");
+            return;
+        }
+        disciplinas();
+        printf("\nDigite a disciplina que deseja pesquisar: ");
+        fgets(discip, 40, stdin);
+        discip[strcspn(discip, "\n")] = '\0';
+
+        int encontrado = 0;
+        for (i = 0; i < ind; i++)
+        {
+            if (strcmp(Cadastro[i].Disc.disciplina, discip) == 0)
+            {
+                encontrado = 1;
+                printf("\nDisciplina: %s", discip);
+                printf("\nO aluno '%s' possui id %d no cadastro.", Cadastro[i].aluno, i + 1);
+                printf("\nNotas: %.2f | %.2f | %.2f      Media: %.2f\n", Cadastro[i].Disc.notas[0], Cadastro[i].Disc.notas[1], Cadastro[i].Disc.notas[2], Cadastro[i].Disc.media);
+            }
+        }
+
+        if (encontrado == 0)
+        {
+            printf("\nNao foi encontrado aluno cadastrado na disciplina %s.\n", discip);
+        }
+        exit = volt();
+    }
+}
+
 int volt()
 {
     int volt;
@@ -282,7 +327,9 @@ int volt()
     {
     case 1:
         printf("\n");
+        system("cls");
     case 2:
+        system("cls");
         break;
     }
 
