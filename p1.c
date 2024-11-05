@@ -32,8 +32,9 @@ struct Aluno
 int menu(void), verificaLista(void), volt(), Cadastrar(int ind, int cad);
 void disciplinas(void);
 void inicia(void);
-void listar(void), exibirAprovados(void);
+void listar(void), listar_tudo(), exibirAprovados(void);
 void buscarAluno(void), pordisciplina(void);
+void alterar();
 
 int main(void)
 {
@@ -61,6 +62,9 @@ int main(void)
             break;
         case 5:
             pordisciplina();
+            break;
+        case 6:
+            alterar();
             break;
         case 8:
             printf("\nSaindo do programa...\n");
@@ -193,25 +197,30 @@ void disciplinas(void)
 void listar(void)
 {
     system("cls");
-    int i, exit = 2;
-    while (exit == 2)
-    {
-        if (ind == 0)
-        {
-            printf("\nNao existe aluno cadastrado");
-            return;
-        }
-        else
-        {
-            printf("-------------------------------------------------------");
-            printf("\nExibicao de todos os dados armazenados");
-            for (i = 0; i < ind; i++)
-            {
-                printf("\nIndice: %d\nAluno: %s\nNascimento: %d/%d/%d\nDisciplina: %s\nNotas: %3.2f| %3.2f| %3.2f|\nMedia: %.2f", i + 1, Cadastro[i].aluno, Cadastro[i].Data.dia, Cadastro[i].Data.mes, Cadastro[i].Data.ano, Cadastro[i].Disc.disciplina, Cadastro[i].Disc.notas[0], Cadastro[i].Disc.notas[1], Cadastro[i].Disc.notas[2], Cadastro[i].Disc.media);
-            }
-            printf("\nTotal de alunos cadastrados: %d\n", ind);
-        }
+    int exit = 2;
+    while(exit == 2){
+        listar_tudo();
         exit = volt();
+    }
+    
+}
+
+void listar_tudo(){
+    if (ind == 0)
+    {
+        printf("\nNao existe aluno cadastrado");
+        return;
+    }
+    else
+    {
+        printf("-------------------------------------------------------");
+        printf("\nExibicao de todos os dados armazenados");
+        for (int i = 0; i < ind; i++)
+        {
+            printf("\nIndice: %d\nAluno: %s\nNascimento: %d/%d/%d\nDisciplina: %s\nNotas: %3.2f| %3.2f| %3.2f|\nMedia: %.2f", i + 1, Cadastro[i].aluno, Cadastro[i].Data.dia, Cadastro[i].Data.mes, Cadastro[i].Data.ano, Cadastro[i].Disc.disciplina, Cadastro[i].Disc.notas[0], Cadastro[i].Disc.notas[1], Cadastro[i].Disc.notas[2], Cadastro[i].Disc.media);
+            printf("\n");
+        }
+        printf("\nTotal de alunos cadastrados: %d\n", ind);
     }
 }
 
@@ -312,6 +321,45 @@ void pordisciplina(void)
         {
             printf("\nNao foi encontrado aluno cadastrado na disciplina %s.\n", discip);
         }
+        exit = volt();
+    }
+}
+
+void alterar()
+{
+    system("cls");
+    listar_tudo();
+    int exit = 2, encontrado = 0, alt;
+    char aluno2[40];
+    float n[3];
+    while (exit == 2)
+    {
+        printf("\nDigite o nome do aluno que deseja alterar: ");
+        fflush(stdout);
+        fgets(aluno2, 50, stdin);
+        aluno2[strcspn(aluno2, "\n")] = '\0';
+
+        for (int i = 0; i < ind; i++)
+        {
+            if (strcmp(Cadastro[i].aluno, aluno2) == 0)
+            {
+                encontrado = 1;
+                alt = i;
+            }
+        }
+
+        if (encontrado)
+        {
+            printf("\nDigite as novas notas do aluno %s: ", aluno2);
+            scanf("%f %f %f", &n[0], &n[1], &n[2]);
+            getchar();
+            Cadastro[alt].Disc.notas[0] = n[0], Cadastro[alt].Disc.notas[1] = n[1], Cadastro[alt].Disc.notas[2] = n[2];
+        }
+        else
+        {
+            printf("\nAluno '%s' nao encontrado\n", aluno2);
+        }
+        printf("\n");
         exit = volt();
     }
 }
