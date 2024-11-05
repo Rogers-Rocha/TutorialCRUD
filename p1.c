@@ -328,12 +328,11 @@ void pordisciplina(void)
 void alterar()
 {
     system("cls");
-    listar_tudo();
     int exit = 2, encontrado = 0, alt;
     char aluno2[40];
-    float n[3];
     while (exit == 2)
     {
+        listar_tudo();
         printf("\nDigite o nome do aluno que deseja alterar: ");
         fflush(stdout);
         fgets(aluno2, 50, stdin);
@@ -350,10 +349,31 @@ void alterar()
 
         if (encontrado)
         {
-            printf("\nDigite as novas notas do aluno %s: ", aluno2);
-            scanf("%f %f %f", &n[0], &n[1], &n[2]);
+            int alte;
+            printf("\nDeseja alterar o nome(1) ou as notas(2): ");
+            scanf("%d", &alte);
             getchar();
-            Cadastro[alt].Disc.notas[0] = n[0], Cadastro[alt].Disc.notas[1] = n[1], Cadastro[alt].Disc.notas[2] = n[2];
+
+            switch (alte)
+            {
+            case 1:
+                printf("\nDigite o novo nome do aluno %s: ",aluno2);
+                fflush(stdout);
+                fgets(Cadastro[alt].aluno, 50, stdin);
+                Cadastro[alt].aluno[strcspn(Cadastro[alt].aluno, "\n")] = '\0';
+
+                printf("\nO antigo nome %s foi alterado para %s\n", aluno2, Cadastro[alt].aluno);
+                break;
+            case 2:
+                printf("\nDigite as novas notas do aluno %s: ", aluno2);
+                scanf("%f %f %f", &Cadastro[alt].Disc.notas[0], &Cadastro[alt].Disc.notas[1], &Cadastro[alt].Disc.notas[2]);
+                getchar();
+                Cadastro[alt].Disc.media = (Cadastro[alt].Disc.notas[0] + Cadastro[alt].Disc.notas[1] + Cadastro[alt].Disc.notas[2]) / 3;
+                printf("\nNovas notas: %3.2f| %3.2f| %3.2f\nMedia: %.2f\n", Cadastro[alt].Disc.notas[0], Cadastro[alt].Disc.notas[1], Cadastro[alt].Disc.notas[2], Cadastro[alt].Disc.media);
+                break;
+            default:
+                break;
+            }
         }
         else
         {
