@@ -29,14 +29,14 @@ struct Aluno
     tipoDisc Disc;
 } Cadastro[max];
 
-int menu(void), verificaLista(void), volt(), Cadastrar(int ind, int cad);
-void disciplinas(void);
-void inicia(void);
-void listar(void), listar_tudo(), exibirAprovados(void);
-void buscarAluno(void), pordisciplina(void);
-void alterar();
+int menu(), verificaLista(), volt(), Cadastrar(int ind, int cad);
+void disciplinas();
+void inicia();
+void listar(), listar_tudo(), exibirAprovados();
+void buscarAluno(), pordisciplina();
+void alterar(), remover();
 
-int main(void)
+int main()
 {
 
     int opcao;
@@ -66,6 +66,9 @@ int main(void)
         case 6:
             alterar();
             break;
+        case 7:
+            remover();
+            break;
         case 8:
             printf("\nSaindo do programa...\n");
             break;
@@ -79,7 +82,7 @@ int main(void)
     return 0;
 }
 
-int menu(void)
+int menu()
 {
     char opc[10];
     int opcao;
@@ -109,7 +112,7 @@ int menu(void)
     return opcao;
 }
 
-void inicia(void)
+void inicia()
 {
     register int i;
     for (i = 0; i < max; i++)
@@ -184,7 +187,7 @@ int Cadastrar(int ind, int cad)
     return ind;
 };
 
-void disciplinas(void)
+void disciplinas()
 {
     printf("------------Disciplinas--------------");
     printf("\nPortugues\n");
@@ -194,7 +197,7 @@ void disciplinas(void)
     printf("-----------------------------------");
 }
 
-void listar(void)
+void listar()
 {
     system("cls");
     int exit = 2;
@@ -224,7 +227,7 @@ void listar_tudo(){
     }
 }
 
-void exibirAprovados(void)
+void exibirAprovados()
 {
     system("cls");
     float cont = 0, aprov;
@@ -250,7 +253,7 @@ void exibirAprovados(void)
     
 }
 
-void buscarAluno(void)
+void buscarAluno()
 {
     system("cls");
     int i = 0, exit = 2;
@@ -287,7 +290,7 @@ void buscarAluno(void)
     }
 }
 
-void pordisciplina(void)
+void pordisciplina()
 {
     system("cls");
     int i, exit = 2;
@@ -357,12 +360,12 @@ void alterar()
             switch (alte)
             {
             case 1:
-                printf("\nDigite o novo nome do aluno %s: ",aluno2);
+                printf("\nDigite o novo nome do aluno '%s': ",aluno2);
                 fflush(stdout);
                 fgets(Cadastro[alt].aluno, 50, stdin);
                 Cadastro[alt].aluno[strcspn(Cadastro[alt].aluno, "\n")] = '\0';
 
-                printf("\nO antigo nome %s foi alterado para %s\n", aluno2, Cadastro[alt].aluno);
+                printf("\nO antigo nome '%s' foi alterado para '%s'\n", aluno2, Cadastro[alt].aluno);
                 break;
             case 2:
                 printf("\nDigite as novas notas do aluno %s: ", aluno2);
@@ -372,6 +375,7 @@ void alterar()
                 printf("\nNovas notas: %3.2f| %3.2f| %3.2f\nMedia: %.2f\n", Cadastro[alt].Disc.notas[0], Cadastro[alt].Disc.notas[1], Cadastro[alt].Disc.notas[2], Cadastro[alt].Disc.media);
                 break;
             default:
+                printf("\nVoce apertou um numero diferente de 1 e 2...saindo do loop...");
                 break;
             }
         }
@@ -380,6 +384,49 @@ void alterar()
             printf("\nAluno '%s' nao encontrado\n", aluno2);
         }
         printf("\n");
+        exit = volt();
+    }
+}
+
+void remover()
+{
+    system("cls");
+    int lin = 0, encontrado = 0, exit = 2, pos = 0;
+    char aluno2[40];
+    while (exit == 2)
+    {
+        listar_tudo();
+        printf("\nDigite o nome do aluno que deseja remover: ");
+        fflush(stdout);
+        fgets(aluno2, 40, stdin);
+        aluno2[strcspn(aluno2, "\n")] = '\0';
+
+        for (lin = 0; lin < ind; lin++)
+        {
+            if (strcmp(Cadastro[lin].aluno, aluno2) == 0)
+            {
+                encontrado = 1;
+                pos = lin;
+                break;
+            }
+        }
+
+        if (encontrado)
+        {
+            for (int coluna = pos; coluna < ind - 1; coluna++)
+                {
+                    Cadastro[coluna] = Cadastro[coluna + 1];
+            }
+            ind--;
+            system("cls");
+            listar_tudo();
+            printf("\nO aluno com o antigo id %d chamado '%s' foi removido.\n", pos + 1, aluno2);
+        }
+        else
+        {
+            printf("\nO aluno '%s' nao existe.\n", aluno2);
+        }
+        encontrado = 0;
         exit = volt();
     }
 }
