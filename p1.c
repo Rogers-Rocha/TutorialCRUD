@@ -148,7 +148,7 @@ int Cadastrar(int ind, int cad)
             fflush(stdout);
             scanf("%d %d %d", &Cadastro[ind].Data.dia, &Cadastro[ind].Data.mes, &Cadastro[ind].Data.ano);
             getchar();
-
+            
             disciplinas();
             printf("\nDigite a sua disciplina: ");
             fflush(stdout);
@@ -160,10 +160,23 @@ int Cadastrar(int ind, int cad)
             // // fgets(Cadastro[Cad].Disc.professor, 50, stdin);
             // // Cadastro[Cad].Disc.professor[strcspn(Cadastro[Cad].Disc.professor, "\n")] = '\0';
 
-            printf("\nDigite as 3 notas do aluno: ");
-            fflush(stdout);
-            scanf("%f %f %f", &Cadastro[ind].Disc.notas[0], &Cadastro[ind].Disc.notas[1], &Cadastro[ind].Disc.notas[2]);
-            getchar();
+            for(int i = 0; i < 3; i++){
+                float nota = -1;
+                do{
+                    printf("\nDigite a nota %d (entre 0 e 10): ", i + 1);
+                    fflush(stdout);
+                    char input[10];
+                    fgets(input, 10, stdin);
+                    nota = strtof(input, NULL);
+
+                    if(nota < 0 || nota > 10){
+                        printf("Nota invalida. Deve ser entre 0 e 10.\n");
+                    }
+                } while (nota < 0 || nota > 10);
+
+                Cadastro[ind].Disc.notas[i] = nota;
+            }
+
             Cadastro[ind].Disc.media = (Cadastro[ind].Disc.notas[0] + Cadastro[ind].Disc.notas[1] + Cadastro[ind].Disc.notas[2])/3;
             cad++;
             ind++;
